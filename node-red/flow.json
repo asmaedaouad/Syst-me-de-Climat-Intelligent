@@ -1,0 +1,231 @@
+[
+    {
+        "id": "cfbb5c51bf9246ef",
+        "type": "tab",
+        "label": "Flux 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "c4097a00bfe50bbb",
+        "type": "http in",
+        "z": "cfbb5c51bf9246ef",
+        "name": "",
+        "url": "/sensor",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 230,
+        "y": 240,
+        "wires": [
+            [
+                "5934c2c56bb45ce5",
+                "6cdecf897c9cb3dd"
+            ]
+        ]
+    },
+    {
+        "id": "5934c2c56bb45ce5",
+        "type": "json",
+        "z": "cfbb5c51bf9246ef",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 470,
+        "y": 220,
+        "wires": [
+            [
+                "620fec64dbd0defd",
+                "571f8bedebc19b67"
+            ]
+        ]
+    },
+    {
+        "id": "5f4f8f4ace1f01c5",
+        "type": "MSSQL",
+        "z": "cfbb5c51bf9246ef",
+        "mssqlCN": "92c11023ad31e4ce",
+        "name": "InsertTempData",
+        "outField": "payload",
+        "returnType": 0,
+        "throwErrors": 1,
+        "query": "",
+        "modeOpt": "queryMode",
+        "modeOptType": "query",
+        "queryOpt": "topic",
+        "queryOptType": "msg",
+        "paramsOpt": "queryParams",
+        "paramsOptType": "none",
+        "rows": "rows",
+        "rowsType": "msg",
+        "parseMustache": false,
+        "params": [],
+        "x": 940,
+        "y": 100,
+        "wires": [
+            [
+                "15480bf9b7a3e73a"
+            ]
+        ]
+    },
+    {
+        "id": "571f8bedebc19b67",
+        "type": "function",
+        "z": "cfbb5c51bf9246ef",
+        "name": "Function: Prepare Data",
+        "func": "// Convertir payload string en objet si nécessaire\nif (typeof msg.payload === \"string\") {\n    try {\n        msg.payload = JSON.parse(msg.payload);\n    } catch (e) {\n        node.error(\"JSON invalide reçu !\");\n        return null;\n    }\n}\n\nlet d = msg.payload;\n\n// Vérifications\nif (!d.year || !d.month || !d.day || !d.hour || d.indoor_temp === undefined) {\n    node.error(\"Champs manquants !\");\n    return null;\n}\n\n// --- Sortie 1 : SQL ---\nlet msgSQL = { ...msg }; // copie de msg pour SQL\nmsgSQL.topic = `\nINSERT INTO TempData2020_2025\n    (year, month, day, hour, indoor_temp, heater_level, fan_level)\nVALUES\n    (${d.year}, ${d.month}, ${d.day}, '${d.hour}', ${d.indoor_temp}, ${d.heater_level}, ${d.fan_level});\n`;\n\n// --- Sortie 2 : WhatsApp ---\nlet msgWhats = { ...msg }; // copie de msg pour WhatsApp\nmsgWhats.payload = `📡 Nouvelle mesure reçue\n🌡 Température : ${d.indoor_temp} °C\n🔥 Chauffage : ${d.heater_level}\n💨 Ventilateur : ${d.fan_level}\n🕒 Heure : ${d.hour}`;\n\n// Si ton nœud WhatsApp n'a pas de numéro fixe\nmsgWhats.to = \"+212XXXXXXXXX\";\n\n// Retourner les 2 sorties\nreturn [msgSQL, msgWhats];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 710,
+        "y": 220,
+        "wires": [
+            [
+                "5f4f8f4ace1f01c5"
+            ],
+            [
+                "90fe6105a961463f"
+            ]
+        ]
+    },
+    {
+        "id": "15480bf9b7a3e73a",
+        "type": "function",
+        "z": "cfbb5c51bf9246ef",
+        "name": "function 5",
+        "func": "msg.payload = \"Data saved in Azure SQL successfully!\";\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1180,
+        "y": 80,
+        "wires": [
+            [
+                "d0e89e91d53f619d"
+            ]
+        ]
+    },
+    {
+        "id": "620fec64dbd0defd",
+        "type": "debug",
+        "z": "cfbb5c51bf9246ef",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "d0e89e91d53f619d",
+        "type": "http response",
+        "z": "cfbb5c51bf9246ef",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1310,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "18185b78a7bb516a",
+        "type": "debug",
+        "z": "cfbb5c51bf9246ef",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1240,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "90fe6105a961463f",
+        "type": "node-red-contrib-whatsapp-cmb-send-message",
+        "z": "cfbb5c51bf9246ef",
+        "name": "WhatsAppAlerts",
+        "credtype": "account",
+        "account": "fdeba9b3999c68e6",
+        "text": "payload",
+        "phonenumbervalue": "",
+        "apikeyvalue": "",
+        "apikeyinputtypemessage": "msg",
+        "phonenumberinputtypemessage": "msg",
+        "inputtypemessage": "msg",
+        "rejectssl": false,
+        "x": 980,
+        "y": 320,
+        "wires": [
+            [
+                "18185b78a7bb516a"
+            ]
+        ]
+    },
+    {
+        "id": "6cdecf897c9cb3dd",
+        "type": "debug",
+        "z": "cfbb5c51bf9246ef",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 280,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "92c11023ad31e4ce",
+        "type": "MSSQL-CN",
+        "tdsVersion": "7_4",
+        "name": "AzureSQL",
+        "server": "YOUR_SERVER.database.windows.net",
+        "port": "1433",
+        "encyption": true,
+        "trustServerCertificate": true,
+        "database": "Asmae_database",
+        "useUTC": true,
+        "connectTimeout": "15000",
+        "requestTimeout": "15000",
+        "cancelTimeout": "5000",
+        "pool": "5",
+        "parseJSON": false,
+        "enableArithAbort": false,
+        "readOnlyIntent": false
+    },
+    {
+        "id": "fdeba9b3999c68e6",
+        "type": "node-red-contrib-whatsapp-cmb-account",
+        "name": "AsmaeBot"
+    },
+    {
+        "id": "2c85eac4cf70f14c",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-mssql-plus": "0.13.1",
+            "node-red-contrib-whatsapp-cmb": "1.0.3"
+        }
+    }
+]

@@ -1,0 +1,11 @@
+pandas
+numpy
+scikit-learn
+joblib
+scipy
+matplotlib
+seaborn
+PySide6
+pyodbc
+azure-storage-blob
+python-dotenv

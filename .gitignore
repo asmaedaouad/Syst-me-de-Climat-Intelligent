@@ -1,0 +1,8 @@
+secrets.h
+.env
+__pycache__/
+*.pyc
+.venv/
+ml/model/model_weights/*.pkl
+.DS_Store
+.vscode/

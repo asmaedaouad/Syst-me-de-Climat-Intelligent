@@ -1,0 +1,62 @@
+{
+  "1": {
+    "avg_max": 17,
+    "avg_min": 9,
+    "daily_swing": 8
+  },
+  "2": {
+    "avg_max": 18,
+    "avg_min": 10,
+    "daily_swing": 8
+  },
+  "3": {
+    "avg_max": 19,
+    "avg_min": 11,
+    "daily_swing": 8
+  },
+  "4": {
+    "avg_max": 21,
+    "avg_min": 12,
+    "daily_swing": 9
+  },
+  "5": {
+    "avg_max": 24,
+    "avg_min": 15,
+    "daily_swing": 9
+  },
+  "6": {
+    "avg_max": 27,
+    "avg_min": 18,
+    "daily_swing": 9
+  },
+  "7": {
+    "avg_max": 31,
+    "avg_min": 21,
+    "daily_swing": 10
+  },
+  "8": {
+    "avg_max": 30,
+    "avg_min": 22,
+    "daily_swing": 8
+  },
+  "9": {
+    "avg_max": 28,
+    "avg_min": 20,
+    "daily_swing": 8
+  },
+  "10": {
+    "avg_max": 24,
+    "avg_min": 16,
+    "daily_swing": 8
+  },
+  "11": {
+    "avg_max": 20,
+    "avg_min": 12,
+    "daily_swing": 8
+  },
+  "12": {
+    "avg_max": 17,
+    "avg_min": 9,
+    "daily_swing": 8
+  }
+}

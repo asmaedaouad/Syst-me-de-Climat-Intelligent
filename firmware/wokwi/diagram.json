@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "author": "Anonymous maker",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": -19.2, "left": -71.96, "attrs": {} },
+    { "type": "wokwi-led", "id": "led1", "top": 6, "left": -226.6, "attrs": { "color": "red" } },
+    {
+      "type": "wokwi-led",
+      "id": "led2",
+      "top": -42,
+      "left": -188.2,
+      "attrs": { "color": "blue" }
+    },
+    {
+      "type": "wokwi-dht22",
+      "id": "dht1",
+      "top": -95.7,
+      "left": 100.2,
+      "attrs": { "temperature": "71.5", "humidity": "90" }
+    },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd1",
+      "top": 92.8,
+      "left": 101.6,
+      "attrs": { "pins": "i2c" }
+    },
+    { "type": "wokwi-servo", "id": "servo1", "top": -174.8, "left": -336, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "esp:26", "led1:A", "green", [ "h-134.25", "v-48" ] ],
+    [ "led1:C", "esp:GND.1", "green", [ "h0.4", "v57.6", "h95.2", "v28.8" ] ],
+    [ "led2:A", "esp:25", "green", [ "h9.6", "v86.4" ] ],
+    [ "led2:C", "esp:GND.1", "green", [ "h-57.2", "v144", "h153.6", "v-9.6" ] ],
+    [ "dht1:VCC", "esp:5V", "red", [ "v9.6", "h-19.2", "v-86.4", "h-364.8", "v230.4" ] ],
+    [ "dht1:GND", "esp:GND.2", "black", [ "v19.2", "h-57.6", "v-28.8" ] ],
+    [ "dht1:SDA", "esp:23", "green", [ "v28.8", "h-47.9", "v-28.8" ] ],
+    [ "lcd1:VCC", "esp:5V", "red", [ "h-57.6", "v86.5", "h-134.4", "v-38.4" ] ],
+    [ "lcd1:GND", "esp:GND.3", "black", [ "v-9.6", "h-57.6", "v-48" ] ],
+    [ "lcd1:SDA", "esp:21", "green", [ "h-48", "v-86.2" ] ],
+    [ "lcd1:SCL", "esp:22", "green", [ "h-38.4", "v-124.5" ] ],
+    [ "servo1:GND", "esp:GND.1", "black", [ "h-9.6", "v249.6" ] ],
+    [ "servo1:V+", "esp:5V", "green", [ "h-38.4", "v307.3", "h307.05" ] ],
+    [ "servo1:PWM", "esp:32", "green", [ "h19.2", "v182.6" ] ]
+  ],
+  "dependencies": {}
+}

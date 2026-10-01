@@ -1,0 +1,11 @@
+# Wokwi Library List
+# See https://docs.wokwi.com/guides/libraries
+
+PubSubClient
+DHT sensor library
+DHT sensor library for ESPx
+LiquidCrystal I2C
+Servo
+ESP32Servo
+ArduinoJson
+ThingSpeak
